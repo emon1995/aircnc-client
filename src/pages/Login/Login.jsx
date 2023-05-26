@@ -10,6 +10,27 @@ const Login = () => {
     useContext(AuthContext);
   const navigate = useNavigate();
 
+  //   Handle submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    signIn(email, password)
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
+        toast.success("Login Successful");
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err.message);
+        toast.error(err.message);
+      });
+  };
+
+  //   Handle google sign in
   const handleGoogleSignIn = () => {
     signInWithGoogle()
       .then((result) => {
@@ -34,6 +55,7 @@ const Login = () => {
           </p>
         </div>
         <form
+          onSubmit={handleSubmit}
           noValidate=""
           action=""
           className="space-y-6 ng-untouched ng-pristine ng-valid"
