@@ -1,6 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { toast } from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
@@ -9,6 +9,10 @@ const Login = () => {
   const { loading, setLoading, signIn, signInWithGoogle, resetPassword } =
     useContext(AuthContext);
   const navigate = useNavigate();
+  const emailRef = useRef();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
 
   //   Handle submit
   const handleSubmit = (e) => {
@@ -20,7 +24,7 @@ const Login = () => {
     signIn(email, password)
       .then((result) => {
         console.log(result.user);
-        navigate("/");
+        navigate(from, { replace: true });
         toast.success("Login Successful");
       })
       .catch((err) => {
@@ -30,12 +34,25 @@ const Login = () => {
       });
   };
 
+  // Handle Reset
+  const handleReset = () => {
+    const email = emailRef.current.value;
+    resetPassword(email)
+      .then(() => {
+        toast.success("Please check your email form reset link");
+        setLoading(false);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
   //   Handle google sign in
   const handleGoogleSignIn = () => {
     signInWithGoogle()
       .then((result) => {
         console.log(result.user);
-        navigate("/");
+        navigate(from, { replace: true });
         toast.success("Login Successful");
       })
       .catch((err) => {
@@ -66,6 +83,7 @@ const Login = () => {
                 Email address
               </label>
               <input
+                ref={emailRef}
                 type="email"
                 name="email"
                 id="email"
@@ -106,7 +124,10 @@ const Login = () => {
           </div>
         </form>
         <div className="space-y-1">
-          <button className="text-xs hover:underline hover:text-rose-500 text-gray-400">
+          <button
+            onClick={handleReset}
+            className="text-xs hover:underline hover:text-rose-500 text-gray-400"
+          >
             Forgot password?
           </button>
         </div>
