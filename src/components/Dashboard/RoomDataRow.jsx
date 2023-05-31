@@ -1,10 +1,9 @@
 import { format } from "date-fns";
-import { useState } from "react";
 import DeleteModal from "../Modal/DeleteModal";
-import { deleteBookings, updateStatus } from "../../api/bookings";
-import { toast } from "react-hot-toast";
+import { useState } from "react";
+import { deleteRooms } from "../../api/rooms";
 
-const TableRow = ({ booking, fetchBookings }) => {
+const RoomDataRow = ({ room, fetchRooms }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -13,13 +12,11 @@ const TableRow = ({ booking, fetchBookings }) => {
 
   const modalHandler = (id) => {
     console.log(id);
-    deleteBookings(id).then((data) => {
+    deleteRooms(id).then((data) => {
       console.log(data);
-      updateStatus(booking.roomId, false).then((data) => {
-        console.log(data);
-        fetchBookings();
-        toast.success("Booking Canceled");
-      });
+      console.log(data);
+      fetchRooms();
+      toast.success("Room Deleted");
     });
     closeModal();
   };
@@ -32,30 +29,30 @@ const TableRow = ({ booking, fetchBookings }) => {
             <div className="block relative">
               <img
                 alt="profile"
-                src={booking?.image}
+                src={room?.image}
                 className="mx-auto object-cover rounded h-10 w-15 "
               />
             </div>
           </div>
           <div className="ml-3">
-            <p className="text-gray-900 whitespace-no-wrap">{booking?.title}</p>
+            <p className="text-gray-900 whitespace-no-wrap">{room?.title}</p>
           </div>
         </div>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 whitespace-no-wrap">{booking?.location}</p>
+        <p className="text-gray-900 whitespace-no-wrap">{room?.location}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 whitespace-no-wrap">${booking?.price}</p>
+        <p className="text-gray-900 whitespace-no-wrap">${room?.price}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 whitespace-no-wrap">
-          {format(new Date(booking?.from), "P")}
+          {format(new Date(room?.from), "P")}
         </p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 whitespace-no-wrap">
-          {format(new Date(booking?.to), "P")}
+          {format(new Date(room?.to), "P")}
         </p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -67,17 +64,26 @@ const TableRow = ({ booking, fetchBookings }) => {
             aria-hidden="true"
             className="absolute inset-0 bg-red-200 opacity-50 rounded-full"
           ></span>
-          <span className="relative">Cancel</span>
+          <span className="relative">Delete</span>
         </span>
         <DeleteModal
           isOpen={isOpen}
           closeModal={closeModal}
           modalHandler={modalHandler}
-          id={booking._id}
+          id={room._id}
         />
+      </td>
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <span className="relative cursor-pointer inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+          ></span>
+          <span className="relative">Update</span>
+        </span>
       </td>
     </tr>
   );
 };
 
-export default TableRow;
+export default RoomDataRow;

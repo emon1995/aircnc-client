@@ -3,6 +3,8 @@ import AddRoomForm from "../../components/Forms/AddRoomForm";
 import { imageUpload } from "../../api/utils";
 import { AuthContext } from "../../providers/AuthProvider";
 import { addRoom } from "../../api/rooms";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AddRoom = () => {
   const { user } = useContext(AuthContext);
@@ -13,6 +15,7 @@ const AddRoom = () => {
     key: "selection",
   });
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
+  const navigate = useNavigate();
 
   // handle form submit
   const handleSubmit = (e) => {
@@ -30,6 +33,8 @@ const AddRoom = () => {
     const description = form.description.value;
     const category = form.category.value;
     const image = form.image.files[0];
+
+    setUploadButtonText("Uploading...");
 
     // upload image
     imageUpload(image)
@@ -57,6 +62,10 @@ const AddRoom = () => {
         addRoom(roomData)
           .then((data) => {
             console.log(data);
+            setUploadButtonText("Uploaded!");
+            setLoading(false);
+            toast.success("Room Added");
+            navigate("/dashboard/my-listings");
           })
           .catch((err) => {
             console.log(err);

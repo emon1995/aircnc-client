@@ -19,9 +19,30 @@ export const getAllRooms = async () => {
   return data;
 };
 
+// filtered host rooms
+export const getRooms = async (email) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/rooms/${email}`
+  );
+  const data = response.json();
+  return data;
+};
+
 // get single room
 export const getRoom = async (id) => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/room/${id}`);
+  const data = response.json();
+  return data;
+};
+
+// get single room
+export const deleteRooms = async (id) => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/rooms/${id}`, {
+    method: "DELETE",
+    headers: {
+      "content-type": "application/json",
+    },
+  });
   const data = response.json();
   return data;
 };

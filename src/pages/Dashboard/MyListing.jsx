@@ -1,19 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
-import { getBookings } from "../../api/bookings";
-import TableRow from "../../components/Dashboard/TableRow";
+import { getRooms } from "../../api/rooms";
+import RoomDataRow from "../../components/Dashboard/RoomDataRow";
 
-const MyBookings = () => {
-  const [bookings, setBookings] = useState([]);
+const MyListings = () => {
   const { user } = useContext(AuthContext);
-  const fetchBookings = () => {
-    getBookings(user?.email).then((data) => {
-      setBookings(data);
+  const [rooms, setRooms] = useState([]);
+  const fetchRooms = () => {
+    getRooms(user?.email).then((data) => {
+      setRooms(data);
     });
   };
 
   useEffect(() => {
-    fetchBookings();
+    fetchRooms();
   }, [user]);
 
   return (
@@ -58,16 +58,22 @@ const MyBookings = () => {
                     scope="col"
                     className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                   >
-                    Action
+                    Delete
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                  >
+                    Update
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {bookings.map((booking) => (
-                  <TableRow
-                    key={booking._id}
-                    booking={booking}
-                    fetchBookings={fetchBookings}
+                {rooms.map((room) => (
+                  <RoomDataRow
+                    key={room._id}
+                    room={room}
+                    fetchRooms={fetchRooms}
                   />
                 ))}
               </tbody>
@@ -79,4 +85,4 @@ const MyBookings = () => {
   );
 };
 
-export default MyBookings;
+export default MyListings;
