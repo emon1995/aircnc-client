@@ -48,6 +48,10 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
+        path: "/dashboard",
+        element: <MyBookings></MyBookings>,
+      },
+      {
         path: "/dashboard/add-room",
         element: <AddRoom></AddRoom>,
       },
