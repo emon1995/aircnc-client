@@ -1,3 +1,4 @@
+// room data post
 export const addRoom = async (roomData) => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/rooms`, {
     method: "POST",
@@ -8,5 +9,19 @@ export const addRoom = async (roomData) => {
   });
 
   const data = await response.json();
+  return data;
+};
+
+// Get all rooms
+export const getAllRooms = async () => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/rooms`);
+  const data = response.json();
+  return data;
+};
+
+// get single room
+export const getRoom = async (id) => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/room/${id}`);
+  const data = response.json();
   return data;
 };

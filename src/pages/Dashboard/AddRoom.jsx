@@ -24,7 +24,7 @@ const AddRoom = () => {
     const from = dates.startDate;
     const to = dates.endDate;
     const price = form.price.value;
-    const total_guest = form.total_guest.value;
+    const guests = form.total_guest.value;
     const bedrooms = form.bedrooms.value;
     const bathrooms = form.bathrooms.value;
     const description = form.description.value;
@@ -40,7 +40,7 @@ const AddRoom = () => {
           from,
           to,
           price: parseFloat(price),
-          total_guest,
+          guests,
           bedrooms,
           bathrooms,
           description,
