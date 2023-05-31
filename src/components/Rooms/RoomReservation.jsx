@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 import { AuthContext } from "../../providers/AuthProvider";
 import BookingModal from "../Modal/BookingModal";
 import { formatDistance } from "date-fns";
-import { addBookings } from "../../api/bookings";
+import { addBookings, updateStatus } from "../../api/bookings";
 import toast from "react-hot-toast";
 
 const RoomReservation = ({ roomData }) => {
@@ -33,6 +33,8 @@ const RoomReservation = ({ roomData }) => {
     to: value.endDate,
     from: value.startDate,
     title: roomData.title,
+    roomId: roomData._id,
+    image: roomData.image,
   });
 
   const closeModal = () => {
@@ -46,10 +48,17 @@ const RoomReservation = ({ roomData }) => {
   const modalHandler = () => {
     addBookings(bookingInfo)
       .then((data) => {
-        console.log(data);
-        toast.success("Booking Successful!");
-        // NavigationPreloadManager("/dashboard/my-bookings")
-        closeModal();
+        updateStatus(roomData._id, true)
+          .then((data) => {
+            console.log(data);
+            toast.success("Booking Successful!");
+            // NavigationPreloadManager("/dashboard/my-bookings")
+            closeModal();
+          })
+          .catch((err) => {
+            console.log(err);
+            closeModal();
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -71,7 +80,7 @@ const RoomReservation = ({ roomData }) => {
       <div className="p-4">
         <Button
           onClick={() => setIsOpen(true)}
-          disabled={roomData.host.email === user.email}
+          disabled={roomData.host.email === user.email || roomData.booked}
           label="Reserve"
         ></Button>
       </div>
