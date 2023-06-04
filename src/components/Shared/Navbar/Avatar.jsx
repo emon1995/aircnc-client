@@ -8,6 +8,7 @@ const Avatar = () => {
   return (
     <div>
       <img
+        referrerPolicy="no-referrer"
         src={user && user.photoURL ? user.photoURL : avatarImg}
         height="30"
         width="30"
