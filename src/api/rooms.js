@@ -22,7 +22,11 @@ export const getAllRooms = async () => {
 // filtered host rooms
 export const getRooms = async (email) => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/rooms/${email}`
+    `${import.meta.env.VITE_API_URL}/rooms/${email}`, {
+    headers: {
+      authorization: `Bearer ${localStorage.getItem("access-token")}`
+    }
+  }
   );
   const data = response.json();
   return data;
