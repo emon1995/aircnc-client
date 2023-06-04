@@ -2,8 +2,9 @@ import { format } from "date-fns";
 import DeleteModal from "../Modal/DeleteModal";
 import { useState } from "react";
 import { deleteRooms } from "../../api/rooms";
+import { toast } from "react-hot-toast";
 
-const RoomDataRow = ({ room, fetchRooms }) => {
+const RoomDataRow = ({ room, refetch }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -15,7 +16,7 @@ const RoomDataRow = ({ room, fetchRooms }) => {
     deleteRooms(id).then((data) => {
       console.log(data);
       console.log(data);
-      fetchRooms();
+      refetch();
       toast.success("Room Deleted");
     });
     closeModal();
